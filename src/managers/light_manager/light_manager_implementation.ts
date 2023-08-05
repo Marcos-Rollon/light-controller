@@ -35,7 +35,7 @@ export class LightManagerImplementation implements LightManager {
         }
         this._decays = [];
         for (let i = 0; i < 20; i++) {
-            this._decays.push(new DecayElement(i, 30, this.setValue))
+            this._decays.push(new DecayElement(i, this.setValue))
         }
     }
 
@@ -62,7 +62,7 @@ export class LightManagerImplementation implements LightManager {
     }
 
     /**
-     * Sends a value to a led. Leds are divided in two groups, the first one is
+     * Sends a value to a led in the range 0-1. Leds are divided in two groups, the first one is
      * 0 to 9, and the second one is 10 to 20 (since we have 21 leds in total)
      * in this way every pca9685 drives 10 or 11 lights instead of 16 and 6
      * 
@@ -100,15 +100,20 @@ export class LightManagerImplementation implements LightManager {
      * 
      * @param {ledNumber: number, value: number, decayRate: number} params
      */
-    setWithDecay({ ledNumber, value, decayRate = 30 }: { ledNumber: number, value: number, decayRate?: number }): void {
+    setWithDecay({ ledNumber, value, decayTime, stepTime }: { ledNumber: number, value: number, decayTime?: number, stepTime?: number }): void {
 
         // Safety check for the index of the array
         if (typeof this._decays[ledNumber] != "undefined") {
             // Clear prev timer (if any) and apply decay
             this._decays[ledNumber].clear();
-            this._decays[ledNumber].decayRate = decayRate;
-            let startValue = value * 1000 //to pass it to milliseconds
-            this._decays[ledNumber].start(startValue)
+            if (decayTime) {
+                this._decays[ledNumber].decayTime = decayTime;
+            }
+            if (stepTime) {
+                this._decays[ledNumber].stepTime = stepTime;
+            }
+
+            this._decays[ledNumber].start(value)
         }
 
         // if (this.decays[ledNumber] != null) {

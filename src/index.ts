@@ -1,11 +1,10 @@
-// const ExpressManager = require("./src/express_manager").ExpressManager;
 import { ExpressManager } from "./managers/express_manager.js";
 import { LightManager } from "./managers/light_manager/light_manager.js";
 import { OscManager } from "./managers/osc_manager.js";
 import path from "path";
 import { Utils } from "./utils/utils.js";
 import { LightManagerImplementation } from "./managers/light_manager/light_manager_implementation.js";
-import { MockLightManagerImplementation } from "./managers/light_manager/mock_light_manager_implementation.js";
+import { WebsocketLightManager } from "./managers/light_manager/websocket_light_manager_implementation.js";
 
 // By design this is hardcoded and cannot change "hot"
 const songList = [
@@ -25,42 +24,34 @@ let expressManger = new ExpressManager({
 	onSongChanged: songWasChanged,
 	onSetLed: onSetLed,
 });
-let lightManager: LightManager = new MockLightManagerImplementation();
-console.log(process.platform);
-// if (process.platform != "linux") {
-// 	lightManager = new MockLightManagerImplementation();
-// } else {
-// 	lightManager = new LightManagerImplementation();
-// }
+let lightManager: LightManager = new WebsocketLightManager();
 let oscManager = new OscManager(onNewOscMessage)
 
 expressManger.init();
 lightManager.init();
 
-//oscManager.init();
-// setTimeout(() => {
-// 	oscManager.subscribeToMeter1();
-// }, 2000);
+oscManager.init(() => {
 
-async function sleep(milliseconds: number) {
-	return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
+	//oscManager.subscribeToMeter1();
+	// oscManager.send("/meters", [
+	// 	{ type: "s", value: "/meters/1" },
+	// ]);
+});
 
 /**
  * Callback fired when the UI changed succesfully the current song
  * @param {number} newIndex 
  */
 function songWasChanged(newIndex: number): void {
-	console.log(newIndex / 4);
-
-	lightManager.setWithDecay({ ledNumber: 2, value: newIndex / 4 });
 	currentIndex = newIndex;
+	console.log(`Active song is ${songList[currentIndex]}`);
+	lightManager.setWithDecay({ ledNumber: newIndex, value: 1 });
 }
 
 function onSetLed(ledNumber: number, value: number, withFade: boolean): void {
 	console.log(`Set value ${value} to led number ${ledNumber} with fade ${withFade}`);
 	if (withFade) {
-		lightManager.setWithDecay({ ledNumber: Number(ledNumber), value: Number(value), decayRate: 20 })
+		lightManager.setWithDecay({ ledNumber: Number(ledNumber), value: Number(value) })
 	} else {
 		lightManager.setValue({ ledNumber: Number(ledNumber), value: Number(value) });
 	}
