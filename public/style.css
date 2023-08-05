@@ -1,0 +1,21 @@
+body {
+    background-color: #000;
+    color: white;
+}
+
+#button_list {
+    display: flex;
+    flex-direction: column;
+}
+
+.list_button {
+    max-width: 300px;
+    height: 40px;
+    padding: 4px;
+    margin: 2px;
+}
+
+.active_button {
+    background-color: green;
+    ;
+}

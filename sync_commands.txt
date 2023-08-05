@@ -1,0 +1,10 @@
+Para sincronizar DESDE LA RASP AL PC, correr esto
+
+rsync -rlptzv --progress --delete --exclude=.git --exclude 'node_modules' --exclude 'package-lock.json' "pi@192.168.0.127:~/Documents/light_controller" .
+
+Para sincronicar DESDE EL PC A LA RASP, correr esto
+
+rsync -rlptzv --progress --delete --exclude=.git --exclude 'node_modules' --exclude 'package-lock.json' . "pi@192.168.0.127:~/Documents/light_controller"
+
+
+CAMBIAR IP SI ES NECESARIO (EVIDENTEMENTE)
