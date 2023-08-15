@@ -5,6 +5,7 @@ import path from "path";
 import { Utils } from "./utils/utils";
 import { LightManagerImplementation } from "./managers/light_manager/light_manager_implementation";
 import { WebsocketLightManager } from "./managers/light_manager/websocket_light_manager_implementation";
+import { TatoMain, onSongChanged, onOSCMsg } from "./tato";
 
 // By design this is hardcoded and cannot change "hot"
 const songList = [
@@ -28,47 +29,44 @@ let lightManager: LightManager = new WebsocketLightManager();
 let oscManager = new OscManager(onNewOscMessage)
 
 expressManger.init();
-lightManager.init();
+// lightManager.init();
+// oscManager.init(() => {});
 
-oscManager.init(() => {
-
-	//oscManager.subscribeToMeter1();
-	// oscManager.send("/meters", [
-	// 	{ type: "s", value: "/meters/1" },
-	// ]);
-});
+TatoMain(lightManager, oscManager);
 
 /**
  * Callback fired when the UI changed succesfully the current song
  * @param {number} newIndex 
  */
 function songWasChanged(newIndex: number): void {
-	currentIndex = newIndex;
-	console.log(`Active song is ${songList[currentIndex]}`);
-	lightManager.setWithDecay({ ledNumber: newIndex, value: 1 });
+	// currentIndex = newIndex;
+	// console.log(`Active song is ${songList[currentIndex]}`);
+	// lightManager.setWithDecay({ ledNumber: newIndex, value: 1 });
+	onSongChanged(songList[newIndex], newIndex);
 }
 
 function onSetLed(ledNumber: number, value: number, withFade: boolean): void {
-	console.log(`Set value ${value} to led number ${ledNumber} with fade ${withFade}`);
-	if (withFade) {
-		lightManager.setWithDecay({ ledNumber: Number(ledNumber), value: Number(value) })
-	} else {
-		lightManager.setValue({ ledNumber: Number(ledNumber), value: Number(value) });
-	}
+	// console.log(`Set value ${value} to led number ${ledNumber} with fade ${withFade}`);
+	// if (withFade) {
+	// 	lightManager.setWithDecay({ ledNumber: Number(ledNumber), value: Number(value) })
+	// } else {
+	// 	lightManager.setValue({ ledNumber: Number(ledNumber), value: Number(value) });
+	// }
 }
 
 // Callback with new osc message
 function onNewOscMessage(oscMsg: any) {
-	if (oscMsg.address == "/meters/1") {
-		// Get data value
-		const value = oscMsg.args[0].value;
-		// Get size of data package
-		let size = value.slice(0, 4);
-		// Get array as uint8 array
-		let uint8 = value.slice(4);
-		// Get array of float numbers from array
-		let result = Utils.uInt8ArrayToFloatArray(uint8);
-		// The first 16 values (0-15) are the input values
-		console.log(result);
-	}
+	onOSCMsg(oscMsg);
+	// if (oscMsg.address == "/meters/1") {
+	// 	// Get data value
+	// 	const value = oscMsg.args[0].value;
+	// 	// Get size of data package
+	// 	let size = value.slice(0, 4);
+	// 	// Get array as uint8 array
+	// 	let uint8 = value.slice(4);
+	// 	// Get array of float numbers from array
+	// 	let result = Utils.uInt8ArrayToFloatArray(uint8);
+	// 	// The first 16 values (0-15) are the input values
+	// 	console.log(result);
+	// }
 }

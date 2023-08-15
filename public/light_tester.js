@@ -6,7 +6,8 @@ document.body.onload = main;
 let decays = [];
 
 socket.on("setValue", (data) => {
-    setLightOpacity(data.number, data.value);
+    console.log(data);
+    setLightOpacity(data.ledNumber, data.value);
 })
 socket.on("setWithDecay", (data) => {
     console.log(data);
@@ -55,7 +56,6 @@ function setWithDecay(number, value, decayTime, stepTime) {
         } else {
             setLightOpacity(number, currentValue);
         }
-        console.log(currentValue)
     }, stepTime);
 
 }
