@@ -6,7 +6,7 @@ export interface LightManager {
 
 export class DecayElement {
     ledNumber: number;
-    timer?: NodeJS.Timer;
+    timer?: any;
     decayTime: number;
     stepTime: number;
     setValue: ({ ledNumber, value }: { ledNumber: number, value: number }) => void

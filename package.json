@@ -11,7 +11,9 @@
     "prestart": "npm run clearbuild",
     "start": "npx tsc && node build/index.js",
     "predev": "npm run clearbuild",
-    "dev": "npx tsc -w & nodemon build/index.js"
+    "dev": "nodemon",
+    "nodemon": "nodemon",
+    "production": "npx tsc --build "
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,8 @@
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1",
     "socket.io": "^4.7.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   }
 }

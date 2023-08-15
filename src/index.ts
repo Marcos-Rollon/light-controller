@@ -1,10 +1,10 @@
-import { ExpressManager } from "./managers/express_manager.js";
-import { LightManager } from "./managers/light_manager/light_manager.js";
-import { OscManager } from "./managers/osc_manager.js";
+import { ExpressManager } from "./managers/express_manager";
+import { LightManager } from "./managers/light_manager/light_manager";
+import { OscManager } from "./managers/osc_manager";
 import path from "path";
-import { Utils } from "./utils/utils.js";
-import { LightManagerImplementation } from "./managers/light_manager/light_manager_implementation.js";
-import { WebsocketLightManager } from "./managers/light_manager/websocket_light_manager_implementation.js";
+import { Utils } from "./utils/utils";
+import { LightManagerImplementation } from "./managers/light_manager/light_manager_implementation";
+import { WebsocketLightManager } from "./managers/light_manager/websocket_light_manager_implementation";
 
 // By design this is hardcoded and cannot change "hot"
 const songList = [
