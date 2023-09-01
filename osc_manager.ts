@@ -10,7 +10,6 @@ export class OscManager {
     udpPort: any;
     onNewOscMessage?: (oscMsg: {}) => void;
     meter1Subscription: NodeJS.Timer?;
-    meter6Subscription: NodeJS.Timer?;
 
     constructor(onNewOscMessage) {
         this.udpPort = new osc.UDPPort({
@@ -62,6 +61,10 @@ export class OscManager {
             this.send("/meters", [
                 { type: "s", value: "/meters/1" },
             ]);
+
+            //TODO: WE MUST RENEW THE SUBSCRIPTION EVERY 10 SECONDS
+            // It should be like this *NOT TESTED YET*
+
             this.meter1Subscription = setInterval(() => {
                 this.send("/renew", [
                     { type: "s", value: "/meters/1" }
@@ -81,6 +84,8 @@ export class OscManager {
         }
     }
 
+    // DESDE AQUÍ 
+    
     subscribeToMeter6(): void {
         if (this.meter6Subscription == null) {
             console.log("Subscription created for meter 6");

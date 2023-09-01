@@ -135,6 +135,14 @@ export class LightManagerImplementation implements LightManager {
         //console.log(Object.keys(this.decays).length);
     }
 
+    /**
+     * Turns off all the lights at once
+     */
+    allChannelsOff(): void {
+
+        this.module1.allChannelsOff();
+        this.module2.allChannelsOff();
+    }
 }
 
 module.exports = { LightManagerImplementation };

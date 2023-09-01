@@ -2,6 +2,7 @@ import { LightManager } from "./light_manager";
 import { Server } from "socket.io";
 
 export class WebsocketLightManager implements LightManager {
+
     socket: Server;
 
 
@@ -22,6 +23,11 @@ export class WebsocketLightManager implements LightManager {
     }
     setWithDecay({ ledNumber, value, decayTime = 500, stepTime = 10 }: { ledNumber: number; value: number; decayTime?: number; stepTime?: number }): void {
         this.socket.emit("setWithDecay", { ledNumber, value, decayTime, stepTime });
+    }
+    allChannelsOff(): void {
+        for (let i = 0; i < 21; i++) {
+            this.setValue({ ledNumber: i, value: 0 });
+        }
     }
 
 }

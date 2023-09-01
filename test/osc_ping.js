@@ -1,16 +1,11 @@
-//@ts-nocheck
-import osc from "osc"
+// Test if the xair is connected
 
+// Copied the class here bc of import bullshit
+const osc = require("osc");
 const XAIR_IP = "169.254.151.124";
 const XAIR_PORT = 10024;
 
-// Sadly the library OSC does not have any types, so no autocompletion for free
-
-export class OscManager {
-    udpPort: any;
-    onNewOscMessage?: (oscMsg: {}) => void;
-    meter1Subscription: NodeJS.Timer?;
-    meter6Subscription: NodeJS.Timer?;
+class OscManager {
 
     constructor(onNewOscMessage) {
         this.udpPort = new osc.UDPPort({
@@ -22,7 +17,7 @@ export class OscManager {
         this.meter1Subscription = null;
     }
 
-    init(onReady): void {
+    init(onReady) {
         // Listen for messages
         this.udpPort.on("message", (oscMsg, timeTag, info) => {
             // console.log("New OSC message : ", oscMsg);
@@ -48,14 +43,14 @@ export class OscManager {
 
     }
 
-    send(address, args): void {
+    send(address, args) {
         this.udpPort.send({
             address: address,
             args: args
         }, XAIR_IP, XAIR_PORT);
     }
 
-    subscribeToMeter1(): void {
+    subscribeToMeter1() {
         if (this.meter1Subscription == null) {
             console.log("Subscription created for meter 1");
 
@@ -73,7 +68,7 @@ export class OscManager {
         }
 
     }
-    unsubscribeFromMeter1(): void {
+    unsubscribeFromMeter1() {
         if (this.meter1Subscription != null) {
             console.log("Unsubscribed from meter 1");
             clearInterval(this.meter1Subscription);
@@ -81,7 +76,7 @@ export class OscManager {
         }
     }
 
-    subscribeToMeter6(): void {
+    subscribeToMeter6() {
         if (this.meter6Subscription == null) {
             console.log("Subscription created for meter 6");
 
@@ -103,3 +98,10 @@ export class OscManager {
     }
 }
 
+
+let oscManager = new OscManager((msg) => {
+    console.log(msg);
+});
+oscManager.init();
+
+oscManager.send("/info");

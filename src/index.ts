@@ -25,7 +25,7 @@ let expressManger = new ExpressManager({
 	onSongChanged: songWasChanged,
 	onSetLed: onSetLed,
 });
-let lightManager: LightManager = new WebsocketLightManager();
+let lightManager: LightManager = new LightManagerImplementation();//new WebsocketLightManager();
 let oscManager = new OscManager(onNewOscMessage)
 
 expressManger.init();
@@ -46,12 +46,8 @@ function songWasChanged(newIndex: number): void {
 }
 
 function onSetLed(ledNumber: number, value: number, withFade: boolean): void {
-	// console.log(`Set value ${value} to led number ${ledNumber} with fade ${withFade}`);
-	// if (withFade) {
-	// 	lightManager.setWithDecay({ ledNumber: Number(ledNumber), value: Number(value) })
-	// } else {
-	// 	lightManager.setValue({ ledNumber: Number(ledNumber), value: Number(value) });
-	// }
+	console.log(`Set led ${ledNumber} to value ${value}`)
+	lightManager.setValue({ ledNumber: ledNumber, value: value });
 }
 
 // Callback with new osc message

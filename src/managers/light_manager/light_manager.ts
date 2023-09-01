@@ -2,6 +2,7 @@ export interface LightManager {
     init(): void;
     setValue({ ledNumber, value }: { ledNumber: number, value: number }): void;
     setWithDecay({ ledNumber, value, decayTime = 500, stepTime = 10 }: { ledNumber: number, value: number, decayTime?: number, stepTime?: number }): void;
+    allChannelsOff(): void;
 }
 
 export class DecayElement {

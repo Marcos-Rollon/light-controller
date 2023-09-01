@@ -1,6 +1,9 @@
 import { LightManager } from "./light_manager";
 
 export class MockLightManagerImplementation implements LightManager {
+    allChannelsOff(): void {
+        console.log("All channels off");
+    }
     init(): void {
         console.log("Mock Light Manager init");
     }
